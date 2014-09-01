@@ -26,13 +26,6 @@ public class WordContentValues extends AbstractContentValues {
         return contentResolver.update(uri(), values(), where == null ? null : where.sel(), where == null ? null : where.args());
     }
 
-    public WordContentValues putId(long value) {
-        mContentValues.put(WordColumns.ID, value);
-        return this;
-    }
-
-
-
     public WordContentValues putOriginalWord(String value) {
         if (value == null) throw new IllegalArgumentException("value for originalWord must not be null");
         mContentValues.put(WordColumns.ORIGINAL_WORD, value);

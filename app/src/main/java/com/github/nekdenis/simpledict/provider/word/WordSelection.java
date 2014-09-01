@@ -53,36 +53,6 @@ public class WordSelection extends AbstractSelection<WordSelection> {
     }
 
 
-    public WordSelection id(long... value) {
-        addEquals(WordColumns.ID, toObjectArray(value));
-        return this;
-    }
-
-    public WordSelection idNot(long... value) {
-        addNotEquals(WordColumns.ID, toObjectArray(value));
-        return this;
-    }
-
-    public WordSelection idGt(long value) {
-        addGreaterThan(WordColumns.ID, value);
-        return this;
-    }
-
-    public WordSelection idGtEq(long value) {
-        addGreaterThanOrEquals(WordColumns.ID, value);
-        return this;
-    }
-
-    public WordSelection idLt(long value) {
-        addLessThan(WordColumns.ID, value);
-        return this;
-    }
-
-    public WordSelection idLtEq(long value) {
-        addLessThanOrEquals(WordColumns.ID, value);
-        return this;
-    }
-
     public WordSelection originalWord(String... value) {
         addEquals(WordColumns.ORIGINAL_WORD, value);
         return this;

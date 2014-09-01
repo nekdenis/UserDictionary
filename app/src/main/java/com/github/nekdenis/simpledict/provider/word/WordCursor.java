@@ -15,13 +15,6 @@ public class WordCursor extends AbstractCursor {
     }
 
     /**
-     * Get the {@code id} value.
-     */
-    public long getId() {
-        return getLongOrNull(WordColumns.ID);
-    }
-
-    /**
      * Get the {@code original_word} value.
      * Cannot be {@code null}.
      */

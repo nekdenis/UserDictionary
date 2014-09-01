@@ -26,7 +26,6 @@ public class GeneratedSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_TABLE_WORD = "CREATE TABLE IF NOT EXISTS "
             + WordColumns.TABLE_NAME + " ( "
             + WordColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + WordColumns.ID + " INTEGER NOT NULL, "
             + WordColumns.ORIGINAL_WORD + " TEXT NOT NULL, "
             + WordColumns.TRANSLATION + " TEXT NOT NULL, "
             + WordColumns.SOURCE + " TEXT, "
