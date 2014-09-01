@@ -9,6 +9,7 @@
     <string name="dialog_ok">ОК</string>
     <string name="no_internet_toast">Отсутсвует интернет соединение</string>
     <string name="check_input_toast">Сначала введите текст</string>
+    <string name="search_title">Поиск</string>
 
 
 </resources>

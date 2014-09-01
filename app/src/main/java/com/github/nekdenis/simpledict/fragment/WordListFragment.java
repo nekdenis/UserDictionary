@@ -6,8 +6,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -21,6 +26,7 @@ import com.github.nekdenis.simpledict.network.AsyncTaskCallback;
 import com.github.nekdenis.simpledict.network.GetTranslationAsyncTask;
 import com.github.nekdenis.simpledict.provider.word.WordColumns;
 import com.github.nekdenis.simpledict.provider.word.WordContentValues;
+import com.github.nekdenis.simpledict.provider.word.WordSelection;
 import com.github.nekdenis.simpledict.util.ConnectionStatus;
 
 public class WordListFragment extends Fragment {
@@ -31,6 +37,7 @@ public class WordListFragment extends Fragment {
     private EditText newWordEditText;
     private Button newWordButton;
     private GetTranslationAsyncTask translationAsyncTask;
+    private String currentFilter = "";
 
     public WordListFragment() {
     }
@@ -38,6 +45,7 @@ public class WordListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         initLoaders();
     }
 
@@ -65,6 +73,46 @@ public class WordListFragment extends Fragment {
     public void onStop() {
         super.onStop();
         detachCallbacks();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //getLoaderManager().restartLoader(WORDS_LOADER_ID, null, new WordLoaderCallback());
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.main, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                currentFilter = !TextUtils.isEmpty(newText) ? newText : "";
+                getLoaderManager().restartLoader(WORDS_LOADER_ID, null, new WordLoaderCallback());
+                return true;
+            }
+        });
+        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                currentFilter = "";
+                getLoaderManager().restartLoader(WORDS_LOADER_ID, null, new WordLoaderCallback());
+                return true;
+            }
+        });
     }
 
     private void initList(View rootView) {
@@ -125,6 +173,10 @@ public class WordListFragment extends Fragment {
 
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            if (!TextUtils.isEmpty(currentFilter)) {
+                WordSelection wordSelection = new WordSelection().originalWordLike("%" + currentFilter + "%").or().translationLike("%" + currentFilter + "%");
+                return new CursorLoader(getActivity(), WordColumns.CONTENT_URI, null, wordSelection.sel(), wordSelection.args(), null);
+            }
             return new CursorLoader(getActivity(), WordColumns.CONTENT_URI, null, null, null, null);
         }
 
