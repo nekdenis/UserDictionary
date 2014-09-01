@@ -6,7 +6,9 @@ import android.support.v7.app.ActionBarActivity;
 import com.github.nekdenis.simpledict.R;
 import com.github.nekdenis.simpledict.fragment.WordListFragment;
 
-
+/**
+ *  Activity with @see WordListFragment
+ */
 public class MainActivity extends ActionBarActivity {
 
     @Override

@@ -6,6 +6,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
+/**
+ * Yandex API translation parser
+ */
 public class TranslationParser implements Parser<String> {
     @Override
     public String parse(String response) throws JSONException {
@@ -15,6 +19,7 @@ public class TranslationParser implements Parser<String> {
             throw new ServerException("error code = " + code);
         } else {
             StringBuilder resultString = new StringBuilder();
+            //collect all words in one string
             JSONArray translations = responseJson.optJSONArray("text");
             for (int i = 0; i < translations.length(); i++) {
                 resultString.append(translations.optString(i));

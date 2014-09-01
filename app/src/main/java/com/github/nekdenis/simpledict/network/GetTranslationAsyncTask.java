@@ -33,7 +33,7 @@ public class GetTranslationAsyncTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... params) {
-        SampleAqCommand<String> translateCommand = new SampleAqCommand<String>("translate");
+        GetAqCommand<String> translateCommand = new GetAqCommand<String>("translate");
         translateCommand.addParam("key", Consts.YANDEX_KEY);
         translateCommand.addParam("text", text);
         translateCommand.addParam("lang", "en-ru");

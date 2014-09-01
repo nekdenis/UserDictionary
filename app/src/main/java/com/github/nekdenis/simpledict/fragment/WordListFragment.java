@@ -34,14 +34,23 @@ import com.github.nekdenis.simpledict.provider.word.WordContentValues;
 import com.github.nekdenis.simpledict.provider.word.WordSelection;
 import com.github.nekdenis.simpledict.util.ConnectionStatus;
 
+
+/**
+ * Main fragment with list of words
+ */
 public class WordListFragment extends Fragment {
 
     public static final int WORDS_LOADER_ID = 0;
+
     private ListView wordList;
     private WordAdapter wordAdapter;
+
     private EditText newWordEditText;
     private Button newWordButton;
+
     private GetTranslationAsyncTask translationAsyncTask;
+
+    //search filter
     private String currentFilter = "";
 
     public WordListFragment() {
@@ -70,26 +79,23 @@ public class WordListFragment extends Fragment {
 
     @Override
     public void onDetach() {
+        //if there is no context - no callback execution
         detachCallbacks();
         super.onDetach();
     }
 
     @Override
     public void onStop() {
-        super.onStop();
+        //if there is no context - no callback execution
         detachCallbacks();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        //getLoaderManager().restartLoader(WORDS_LOADER_ID, null, new WordLoaderCallback());
+        super.onStop();
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.main, menu);
+        //init search bar
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -159,6 +165,10 @@ public class WordListFragment extends Fragment {
         }
     }
 
+    /**
+     * check user inputs before submitting
+     * @return true if inputs are valid
+     */
     private boolean validateInput() {
         if (TextUtils.isEmpty(newWordEditText.getText().toString())) {
             Toast.makeText(getActivity(), R.string.check_input_toast, Toast.LENGTH_SHORT).show();
@@ -167,6 +177,10 @@ public class WordListFragment extends Fragment {
         return true;
     }
 
+    /**
+     * start background execution of translation request
+     * @param text
+     */
     private void translate(String text) {
         if (!ConnectionStatus.checkInternetConnection(getActivity())) {
             Toast.makeText(getActivity(), R.string.no_internet_toast, Toast.LENGTH_SHORT).show();
@@ -183,6 +197,9 @@ public class WordListFragment extends Fragment {
         }
     }
 
+    /**
+     * callback of translation request that executes in UI thread
+     */
     private class TranslateCallback implements AsyncTaskCallback<WordContentValues> {
         @Override
         public void onPostExecute(WordContentValues result) {
@@ -191,20 +208,26 @@ public class WordListFragment extends Fragment {
         }
     }
 
+    /**
+     * loader callback for WordCursor
+     */
     private class WordLoaderCallback implements LoaderManager.LoaderCallbacks<Cursor> {
 
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             if (!TextUtils.isEmpty(currentFilter)) {
+                //apply filter
                 WordSelection wordSelection = new WordSelection().originalWordLike("%" + currentFilter + "%").or().translationLike("%" + currentFilter + "%");
                 return new CursorLoader(getActivity(), WordColumns.CONTENT_URI, null, wordSelection.sel(), wordSelection.args(), WordColumns.ADDED_DATE + " DESC");
             }
+            //load data without filter
             return new CursorLoader(getActivity(), WordColumns.CONTENT_URI, null, null, null, WordColumns.ADDED_DATE + " DESC");
         }
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             if (wordAdapter != null) {
+                //refresh list
                 wordAdapter.swapCursor(data);
             }
         }

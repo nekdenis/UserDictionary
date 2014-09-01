@@ -14,10 +14,12 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("serial")
-public class SampleAqCommand<T> {
+/**
+ * Command for executing GET requests
+ */
+public class GetAqCommand<T> {
 
-    protected static final String TAG = SampleAqCommand.class.getSimpleName();
+    protected static final String TAG = GetAqCommand.class.getSimpleName();
 
     protected String methodName;
 
@@ -27,7 +29,7 @@ public class SampleAqCommand<T> {
 
     protected Parser<T> parser;
 
-    public SampleAqCommand(String methodName) {
+    public GetAqCommand(String methodName) {
         this.methodName = methodName;
         this.params = new ArrayList<NameValuePair>();
         this.requestUrl = Consts.YANDEX_TRANSLATE_URL + methodName;

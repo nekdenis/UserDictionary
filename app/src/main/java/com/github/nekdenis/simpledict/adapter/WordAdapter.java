@@ -11,6 +11,9 @@ import android.widget.TextView;
 import com.github.nekdenis.simpledict.R;
 import com.github.nekdenis.simpledict.provider.word.WordCursor;
 
+/**
+ * adapter that shows WordCursor content
+ */
 public class WordAdapter extends CursorAdapter {
 
     private final LayoutInflater mInflater;
