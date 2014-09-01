@@ -7,5 +7,8 @@
     <string name="add_word_button">Добавить</string>
     <string name="new_word_hint">Введите слово</string>
     <string name="dialog_ok">ОК</string>
+    <string name="no_internet_toast">Отсутсвует интернет соединение</string>
+    <string name="check_input_toast">Сначала введите текст</string>
+
 
 </resources>
