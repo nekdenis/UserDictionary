@@ -1,11 +1,6 @@
 {
 	"fields": [
 		{
-			"name": "id",
-			"type": "Long",
-			"nullable": false,
-		},
-		{
 			"name": "original_word",
 			"type": "String",
 			"nullable": false,
