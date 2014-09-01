@@ -1,0 +1,36 @@
+{
+	"fields": [
+		{
+			"name": "id",
+			"type": "Long",
+			"nullable": false,
+		},
+		{
+			"name": "original_word",
+			"type": "String",
+			"nullable": false,
+		},
+		{
+			"name": "translation",
+			"type": "String",
+			"nullable": false,
+		},
+		{
+			"name": "source",
+			"type": "String",
+			"nullable": true,
+		},
+		{
+			"name": "added_date",
+			"type": "Long",
+			"nullable": true,
+		},
+	],
+
+	"constraints": [
+		{
+			"name": "unique_name",
+			"definition": "UNIQUE (original_word) ON CONFLICT REPLACE"
+		},
+	],
+}

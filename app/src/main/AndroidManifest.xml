@@ -16,6 +16,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
 
+        <provider
+            android:name="com.github.nekdenis.simpledict.provider.GeneratedProvider"
+            android:authorities="com.github.nekdenis.simpledict.provider"
+            android:exported="false" />
+    </application>
 </manifest>
