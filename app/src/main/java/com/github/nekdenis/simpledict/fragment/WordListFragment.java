@@ -1,5 +1,6 @@
 package com.github.nekdenis.simpledict.fragment;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,15 +10,19 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.nekdenis.simpledict.R;
@@ -130,11 +135,28 @@ public class WordListFragment extends Fragment {
         newWordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validateInput()) {
-                    translate(newWordEditText.getText().toString());
-                }
+                onTranslateClick();
             }
         });
+        newWordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    onTranslateClick();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void onTranslateClick() {
+        if (validateInput()) {
+            translate(newWordEditText.getText().toString());
+            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(
+                    Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(newWordEditText.getWindowToken(), 0);
+            newWordEditText.setText("");
+        }
     }
 
     private boolean validateInput() {
@@ -175,9 +197,9 @@ public class WordListFragment extends Fragment {
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             if (!TextUtils.isEmpty(currentFilter)) {
                 WordSelection wordSelection = new WordSelection().originalWordLike("%" + currentFilter + "%").or().translationLike("%" + currentFilter + "%");
-                return new CursorLoader(getActivity(), WordColumns.CONTENT_URI, null, wordSelection.sel(), wordSelection.args(), null);
+                return new CursorLoader(getActivity(), WordColumns.CONTENT_URI, null, wordSelection.sel(), wordSelection.args(), WordColumns.ADDED_DATE + " DESC");
             }
-            return new CursorLoader(getActivity(), WordColumns.CONTENT_URI, null, null, null, null);
+            return new CursorLoader(getActivity(), WordColumns.CONTENT_URI, null, null, null, WordColumns.ADDED_DATE + " DESC");
         }
 
         @Override

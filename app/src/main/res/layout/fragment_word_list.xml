@@ -18,7 +18,8 @@
         android:layout_toLeftOf="@+id/word_list_new_word_button"
         android:singleLine="true"
         android:layout_marginRight="8dp"
-        android:hint="@string/new_word_hint"/>
+        android:hint="@string/new_word_hint"
+        android:imeOptions="actionDone"/>
 
     <Button
         android:id="@id/word_list_new_word_button"
